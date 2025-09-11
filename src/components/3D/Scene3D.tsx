@@ -1,11 +1,9 @@
 import React, { Suspense } from 'react';
+import SplineBrain from './SplineBrain';
+import InteractiveWorkflow from './InteractiveWorkflow';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
-import FloatingGeometry from './FloatingGeometry';
-import ParticleField from './ParticleField';
-import TechHero from './TechHero';
 import Accents from './Accents';
-import InteractiveWorkflow from './InteractiveWorkflow';
 
 interface Scene3DProps {
   type: 'hero' | 'workflow';
@@ -14,6 +12,20 @@ interface Scene3DProps {
 }
 
 const Scene3D: React.FC<Scene3DProps> = ({ type, onNodeClick, activeNode = 0 }) => {
+  // For hero type, use Spline brain instead of Canvas
+  if (type === 'hero') {
+    return (
+      <div className="w-full h-full">
+        <SplineBrain 
+          autoRotate={true} 
+          rotationSpeed={0.3}
+          className="opacity-80"
+        />
+      </div>
+    );
+  }
+
+  // For workflow type, keep the existing Three.js setup
   return (
     <Canvas
       style={{ width: '100%', height: '100%', background: 'transparent' }}
@@ -24,28 +36,23 @@ const Scene3D: React.FC<Scene3DProps> = ({ type, onNodeClick, activeNode = 0 }) 
       
       {/* Lighting */}
       <ambientLight intensity={0.3} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} />
+      <directionalLight position={[10, 10, 5]} intensity={0.6} color="#f3f4f6" />
       <pointLight position={[-10, -10, -5]} intensity={0.4} color="#e5e7eb" />
+      <pointLight position={[5, -5, 5]} intensity={0.3} color="#d1d5db" />
       
       {/* Environment */}
-      <Environment preset="night" background={false} />
+      <Environment preset="studio" background={false} />
       
       <Suspense fallback={null}>
-        {type === 'hero' && <TechHero />}
-        
-        {type === 'workflow' && onNodeClick && (
-          <>
-            <InteractiveWorkflow onNodeClick={onNodeClick} activeNode={activeNode} />
-            <Accents />
-          </>
-        )}
+        <InteractiveWorkflow onNodeClick={onNodeClick} activeNode={activeNode} />
+        <Accents />
       </Suspense>
       
       <OrbitControls 
         enableZoom={false}
         enablePan={false}
-        enableRotate={type === 'workflow'}
-        autoRotate={type === 'hero'}
+        enableRotate={true}
+        autoRotate={false}
         autoRotateSpeed={0.3}
         maxPolarAngle={Math.PI / 2}
         minPolarAngle={Math.PI / 2}
