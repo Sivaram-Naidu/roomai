@@ -549,46 +549,23 @@ function App() {
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                   >
-                       <TiltCard className="h-full">
-                         <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-700 rounded-2xl p-8 card-hover group h-full">
-                           <div className="flex items-center justify-between mb-6">
-                             <div className="p-3 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl group-hover:from-gray-600 group-hover:to-gray-700 transition-all duration-300">
-                               <solution.icon className="w-8 h-8 text-silver-300" />
-                             </div>
-                             <div className="text-right">
-                               <div className="text-2xl font-bold text-white">{solution.stats.accuracy}</div>
-                               <div className="text-sm text-gray-400">Accuracy</div>
-                             </div>
-                           </div>
-                           
-                           <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-silver-200 transition-colors">
-                             {solution.title}
-                           </h3>
-                           
-                           <p className="text-gray-300 mb-6 leading-relaxed">
-                             {solution.description}
-                           </p>
-                           
-                           <div className="space-y-3 mb-6">
-                             {solution.features.map((feature, featureIndex) => (
-                               <div key={featureIndex} className="flex items-center text-sm text-gray-400">
-                                 <CheckCircle className="w-4 h-4 text-green-400 mr-3 flex-shrink-0" />
-                                 {feature}
-                               </div>
-                             ))}
-                           </div>
-                           
-                           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                             <div className="flex items-center space-x-4 text-sm text-gray-400">
-                               <span>{solution.stats.speed}</span>
-                               <span>•</span>
-                               <span>{solution.stats.efficiency}</span>
-                             </div>
-                             <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
-                           </div>
-                         </div>
-                       </TiltCard>
-                      </motion.div>
+                    <service.icon className="w-8 h-8 text-black" />
+                  </motion.div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-silver-200 transition-colors">
+                    {service.title}
+                  </h3>
+                  
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    {service.description}
+                  </p>
+                  
+                  <div className="space-y-3 mb-6">
+                    {service.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center text-sm text-gray-400">
+                        <CheckCircle className="w-4 h-4 text-green-400 mr-3 flex-shrink-0" />
+                        {feature}
+                      </div>
                     ))}
                   </div>
                   
@@ -1004,12 +981,11 @@ function App() {
                     <option value="data-agent" className="bg-gray-800">Data Analytics Agent</option>
                     <option value="sales-agent" className="bg-gray-800">Sales Optimization Agent</option>
                     <option value="scheduling-agent" className="bg-gray-800">Scheduling Intelligence Agent</option>
-            <div className="absolute inset-0 opacity-15 pointer-events-none">
                     <option value="custom" className="bg-gray-800">Custom Solution</option>
                   </select>
                 </motion.div>
               </div>
-            <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto bg-black/20 backdrop-blur-sm rounded-3xl p-8">
+
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
