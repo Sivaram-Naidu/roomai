@@ -34,7 +34,6 @@ import {
 } from 'lucide-react';
 import Scene3D from './components/3D/Scene3D';
 import PerformanceOptimizer from './components/PerformanceOptimizer';
-import TiltCard from './components/UX/TiltCard';
 import LottieRemote from './components/Lottie/LottieRemote';
 
 function App() {
@@ -551,8 +550,22 @@ function App() {
                   >
                     <service.icon className="w-8 h-8 text-black" />
                   </motion.div>
+                  {/* Contextual tech animation per card */}
+                  <div className="absolute -right-2 -top-2 w-24 h-24 opacity-70 pointer-events-none">
+                    <LottieRemote
+                      src={
+                        index % 3 === 0
+                          ? 'https://assets10.lottiefiles.com/packages/lf20_kyu7xb1v.json' /* circuit */
+                          : index % 3 === 1
+                          ? 'https://assets9.lottiefiles.com/private_files/lf30_q5pk6p1k.json' /* ai brain */
+                          : 'https://assets1.lottiefiles.com/packages/lf20_zrqthn6o.json' /* data flow */
+                      }
+                      className="w-full h-full"
+                      speed={0.8}
+                    />
+                  </div>
                   
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-silver-200 transition-colors">
+                  <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-silver-200 transition-all duration-300">
                     {service.title}
                   </h3>
                   
@@ -562,10 +575,17 @@ function App() {
                   
                   <div className="space-y-3 mb-6">
                     {service.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center text-sm text-gray-400">
-                        <CheckCircle className="w-4 h-4 text-green-400 mr-3 flex-shrink-0" />
-                        {feature}
-                      </div>
+                      <motion.div 
+                        key={featureIndex} 
+                        className="flex items-center space-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: featureIndex * 0.1 }}
+                        viewport={{ once: true }}
+                      >
+                        <CheckCircle className="w-4 h-4 text-silver-400 flex-shrink-0" />
+                        <span className="text-sm text-gray-300">{feature}</span>
+                      </motion.div>
                     ))}
                   </div>
                   
@@ -981,6 +1001,7 @@ function App() {
                     <option value="data-agent" className="bg-gray-800">Data Analytics Agent</option>
                     <option value="sales-agent" className="bg-gray-800">Sales Optimization Agent</option>
                     <option value="scheduling-agent" className="bg-gray-800">Scheduling Intelligence Agent</option>
+                    <option value="content-agent" className="bg-gray-800">Content Generation Agent</option>
                     <option value="custom" className="bg-gray-800">Custom Solution</option>
                   </select>
                 </motion.div>
