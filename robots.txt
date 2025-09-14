@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agentroomai.com/sitemap.xml
