@@ -25,6 +25,17 @@ import PerformanceOptimizer from './components/PerformanceOptimizer';
 import SplineAIBot from './components/3D/SplineAIBot';
 import CircularSolutionCard from './components/UX/CircularSolutionCard';
 
+// Suppress Spline console errors
+const originalConsoleError = console.error;
+console.error = (...args: any[]) => {
+  // Filter out Spline "Missing property" errors
+  const message = args[0];
+  if (typeof message === 'string' && message.includes('Missing property')) {
+    return; // Ignore this error
+  }
+  // Call original console.error for other errors
+  originalConsoleError.apply(console, args);
+};
 const App: React.FC = () => {
   const [activeWorkflowNode, setActiveWorkflowNode] = useState(0);
   const { scrollYProgress } = useScroll();
@@ -219,7 +230,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="relative py-32 px-6">
+        <section id="services" className="relative pb-32 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
               className="text-center mb-20"
@@ -228,24 +239,24 @@ const App: React.FC = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-5xl md:text-6xl font-bold mb-6">
+              <h2 className="text-5xl md:text-6xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Agentic AI Solutions
                 </span>
               </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
                 Intelligent AI agents designed to automate and optimize your business processes
               </p>
             </motion.div>
 
             {/* Main Content Container - Centered */}
-            <div className="flex items-center justify-center min-h-[500px]">
+            <div className="flex items-center justify-center min-h-[600px] mt-16">
               <div className="relative w-full max-w-4xl mx-auto">
-                <div className="relative flex items-center justify-center h-[500px]">
+                <div className="relative flex items-center justify-center h-[600px]">
                   {/* Central 3D AI Bot */}
                   <div className="absolute inset-0 flex items-center justify-center z-10">
                     <motion.div
-                      className="w-64 h-64"
+                      className="w-64 h-64 mt-20"
                       initial={{ opacity: 0, scale: 0.8 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 1, delay: 0.3 }}
@@ -279,10 +290,10 @@ const App: React.FC = () => {
         </section>
 
         {/* Interactive Workflow Section */}
-        <section id="workflow" className="relative py-32 px-6">
+        <section id="workflow" className="relative py-16 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
-              className="text-center mb-20"
+              className="text-center mb-12"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -298,9 +309,9 @@ const App: React.FC = () => {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* 3D Workflow Visualization */}
-              <div className="h-96 lg:h-[500px]">
+              <div className="h-80 lg:h-[400px]">
                 <Scene3D 
                   type="workflow" 
                   onNodeClick={setActiveWorkflowNode}
@@ -309,7 +320,7 @@ const App: React.FC = () => {
               </div>
 
               {/* Workflow Details */}
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {workflowSteps.map((step, index) => (
                   <motion.div
                     key={index}
@@ -344,10 +355,10 @@ const App: React.FC = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section id="testimonials" className="relative py-32 px-6">
+        <section id="testimonials" className="relative py-16 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
-              className="text-center mb-20"
+              className="text-center mb-12"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -402,7 +413,7 @@ const App: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="relative py-32 px-6">
+        <section className="relative py-20 px-6">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -415,7 +426,7 @@ const App: React.FC = () => {
                   Ready to Transform Your Business?
                 </span>
               </h2>
-              <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
                 Join industry leaders who trust Agent Room AI to revolutionize their operations with intelligent automation.
               </p>
               
@@ -442,7 +453,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Footer */}
-        <footer className="relative border-t border-gray-800/50 py-16 px-6">
+        <footer className="relative border-t border-gray-800/50 py-12 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-4 gap-8">
               <div className="md:col-span-2">
@@ -482,7 +493,7 @@ const App: React.FC = () => {
               </div>
             </div>
             
-            <div className="border-t border-gray-800/50 mt-12 pt-8 text-center text-gray-400">
+            <div className="border-t border-gray-800/50 mt-8 pt-6 text-center text-gray-400">
               <p>&copy; 2024 Agent Room AI. All rights reserved. Built with cutting-edge technology.</p>
             </div>
           </div>
