@@ -23,9 +23,9 @@ const CircularSolutionCard: React.FC<CircularSolutionCardProps> = ({
 }) => {
   // Calculate position in perfect circle around center
   const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
-  const radius = 250; // Distance from center
+  const radius = 280; // Distance from center
   const x = Math.cos(angle) * radius - 88; // Offset to center the cards (half of card width)
-  const y = Math.sin(angle) * radius - 88; // Offset to center the cards (half of card height)
+  const y = Math.sin(angle) * radius - 88 + 80; // Offset to center the cards and move down
 
   return (
     <motion.div
