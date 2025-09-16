@@ -309,47 +309,45 @@ const App: React.FC = () => {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* 3D Workflow Visualization */}
-              <div className="h-80 lg:h-[400px]">
-                <Scene3D 
-                  type="workflow" 
-                  onNodeClick={setActiveWorkflowNode}
-                  activeNode={activeWorkflowNode}
-                />
-              </div>
+            {/* Full Width 3D Workflow Visualization */}
+            <div className="w-full h-[500px] md:h-[600px] mb-16">
+              <Scene3D 
+                type="workflow" 
+                onNodeClick={setActiveWorkflowNode}
+                activeNode={activeWorkflowNode}
+              />
+            </div>
 
-              {/* Workflow Details */}
-              <div className="space-y-6">
-                {workflowSteps.map((step, index) => (
-                  <motion.div
-                    key={index}
-                    className={`p-6 rounded-2xl border transition-all duration-500 ${
-                      index === activeWorkflowNode
-                        ? 'bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-orange-500/50 shadow-2xl shadow-orange-500/20'
-                        : 'bg-gray-900/50 border-gray-700/30 hover:border-gray-600/50'
-                    }`}
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className={`p-3 rounded-xl bg-gradient-to-r ${step.color} flex-shrink-0`}>
-                        {step.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-white mb-2">
-                          {step.title}
-                        </h3>
-                        <p className="text-gray-300 leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
+            {/* Workflow Details Below Animation */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {workflowSteps.map((step, index) => (
+                <motion.div
+                  key={index}
+                  className={`p-6 rounded-2xl border transition-all duration-500 ${
+                    index === activeWorkflowNode
+                      ? 'bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-orange-500/50 shadow-2xl shadow-orange-500/20'
+                      : 'bg-gray-900/50 border-gray-700/30 hover:border-gray-600/50'
+                  }`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className={`p-3 rounded-xl bg-gradient-to-r ${step.color} flex-shrink-0`}>
+                      {step.icon}
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
