@@ -17,8 +17,6 @@ import {
 } from 'lucide-react';
 import Scene3D from './components/3D/Scene3D';
 import PerformanceOptimizer from './components/PerformanceOptimizer';
-import SplineAIBot from './components/3D/SplineAIBot';
-import CircularSolutionCard from './components/UX/CircularSolutionCard';
 
 // Suppress Spline console errors
 const originalConsoleError = console.error;
@@ -219,42 +217,31 @@ const App: React.FC = () => {
               </p>
             </motion.div>
 
-            {/* Main Content Container - Centered */}
-            <div className="flex items-center justify-center min-h-[600px] mt-16">
-              <div className="relative w-full max-w-4xl mx-auto">
-                <div className="relative flex items-center justify-center h-[600px]">
-                  {/* Central 3D AI Bot */}
-                  <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <motion.div
-                      className="w-64 h-64 mt-20"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 1, delay: 0.3 }}
-                      viewport={{ once: true }}
-                    >
-                      <SplineAIBot 
-                        autoRotate={true} 
-                        rotationSpeed={0.4}
-                        className="opacity-90"
-                      />
-                    </motion.div>
+            {/* Solutions Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-16">
+              {agenticSolutions.map((solution, index) => (
+                <motion.div
+                  key={index}
+                  className="p-8 rounded-2xl bg-gradient-to-br from-gray-900/90 to-gray-800/80 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 group"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                >
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/20 group-hover:from-orange-500/30 group-hover:to-orange-600/30 transition-all duration-300">
+                      <solution.icon className="w-8 h-8 text-orange-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">
+                      {solution.title}
+                    </h3>
+                    <p className="text-gray-300 leading-relaxed">
+                      {solution.description}
+                    </p>
                   </div>
-
-                  {/* Solution Cards in Circle */}
-                  {agenticSolutions.map((solution, index) => (
-                    <CircularSolutionCard
-                      key={index}
-                      title={solution.title}
-                      description={solution.description}
-                      icon={solution.icon}
-                      index={index}
-                      total={agenticSolutions.length}
-                      isActive={false}
-                      onClick={() => {}}
-                    />
-                  ))}
-                </div>
-              </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
@@ -275,49 +262,52 @@ const App: React.FC = () => {
                 </span>
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Experience our proven methodology through interactive 3D visualization
+                Our proven methodology for delivering exceptional AI solutions
               </p>
             </motion.div>
 
-            {/* Full Width 3D Workflow Visualization */}
-            <div className="w-full h-[500px] md:h-[600px] mb-16">
-              <Scene3D 
-                type="workflow" 
-                onNodeClick={setActiveWorkflowNode}
-                activeNode={activeWorkflowNode}
-              />
-            </div>
+            {/* Workflow Steps with Visual Flow */}
+            <div className="relative max-w-6xl mx-auto mb-16">
+              {/* Connection Lines */}
+              <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-orange-500/0 via-orange-500/50 to-orange-500/0 transform -translate-y-1/2" />
 
-            {/* Workflow Details Below Animation */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {workflowSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  className={`p-6 rounded-2xl border transition-all duration-500 ${
-                    index === activeWorkflowNode
-                      ? 'bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-orange-500/50 shadow-2xl shadow-orange-500/20'
-                      : 'bg-gray-900/50 border-gray-700/30 hover:border-gray-600/50'
-                  }`}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-r ${step.color} flex-shrink-0`}>
-                      {step.icon}
+              {/* Workflow Cards */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+                {workflowSteps.map((step, index) => (
+                  <motion.div
+                    key={index}
+                    className={`p-6 rounded-2xl border transition-all duration-500 relative bg-gray-900/80 backdrop-blur-sm ${
+                      index === activeWorkflowNode
+                        ? 'border-orange-500/70 shadow-2xl shadow-orange-500/30 scale-105'
+                        : 'border-gray-700/50 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/10'
+                    }`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -8 }}
+                  >
+                    {/* Step Number */}
+                    <div className="absolute -top-4 -right-4 w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                      {index + 1}
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-gray-300 leading-relaxed">
-                        {step.description}
-                      </p>
+
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <div className={`p-3 rounded-xl bg-gradient-to-r ${step.color} flex-shrink-0`}>
+                        {step.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm text-gray-300 leading-relaxed">
+                          {step.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -393,12 +383,16 @@ const App: React.FC = () => {
               </div>
               
               <div>
-                <h3 className="font-semibold text-white mb-4">Company</h3>
-                <ul className="space-y-2 text-gray-400">
-                  <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
+                <h3 className="font-semibold text-white mb-4">Contact Us</h3>
+                <ul className="space-y-3 text-gray-400">
+                  <li className="flex items-center space-x-2">
+                    <Phone className="w-4 h-4 text-orange-400" />
+                    <a href="tel:+917842429871" className="hover:text-white transition-colors">+91 7842429871</a>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <Mail className="w-4 h-4 text-orange-400" />
+                    <a href="mailto:admin@agentroomai.com" className="hover:text-white transition-colors">admin@agentroomai.com</a>
+                  </li>
                 </ul>
               </div>
             </div>
