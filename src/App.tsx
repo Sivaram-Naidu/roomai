@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  Brain, 
-  Zap, 
-  Target, 
-  Shield, 
-  ArrowRight, 
+import {
+  Brain,
+  Zap,
+  Target,
+  Shield,
+  ArrowRight,
   Play,
-  CheckCircle,
-  Star,
-  Users,
-  TrendingUp,
   Award,
   Sparkles,
   MessageSquare,
@@ -20,7 +16,6 @@ import {
   Headphones
 } from 'lucide-react';
 import Scene3D from './components/3D/Scene3D';
-import TiltCard from './components/UX/TiltCard';
 import PerformanceOptimizer from './components/PerformanceOptimizer';
 import SplineAIBot from './components/3D/SplineAIBot';
 import CircularSolutionCard from './components/UX/CircularSolutionCard';
@@ -110,30 +105,6 @@ const App: React.FC = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "CTO, TechFlow Solutions",
-      content: "Agent Room AI transformed our customer service operations. Our AI agents now handle 80% of inquiries with 95% satisfaction rates.",
-      rating: 5,
-      avatar: "https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Operations Director, GlobalCorp",
-      content: "The intelligent automation reduced our processing time by 70% while improving accuracy. Exceptional ROI and support.",
-      rating: 5,
-      avatar: "https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-    },
-    {
-      name: "Emily Watson",
-      role: "CEO, InnovateLab",
-      content: "Their AI agents understand our complex workflows better than we expected. The predictive capabilities are game-changing.",
-      rating: 5,
-      avatar: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-    }
-  ];
-
   return (
     <PerformanceOptimizer>
       <div className="min-h-screen bg-black text-white overflow-hidden">
@@ -171,7 +142,6 @@ const App: React.FC = () => {
             >
               <a href="#services" className="text-white hover:text-blue-400 transition-colors font-medium">Services</a>
               <a href="#workflow" className="text-white hover:text-blue-400 transition-colors font-medium">Process</a>
-              <a href="#testimonials" className="text-white hover:text-blue-400 transition-colors font-medium">Testimonials</a>
               <button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-6 py-2 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105">
                 Get Started
               </button>
@@ -346,64 +316,6 @@ const App: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section id="testimonials" className="relative py-16 px-6">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-5xl md:text-6xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  Client Success Stories
-                </span>
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Discover how leading companies transformed their operations with our AI agents
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <TiltCard>
-                    <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 h-full hover:border-gray-600/50 transition-all duration-300">
-                      <div className="flex items-center mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                      <p className="text-gray-200 mb-6 leading-relaxed italic">
-                        "{testimonial.content}"
-                      </p>
-                      <div className="flex items-center space-x-4">
-                        <img
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div>
-                          <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                          <p className="text-gray-400 text-sm">{testimonial.role}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </TiltCard>
                 </motion.div>
               ))}
             </div>
