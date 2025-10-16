@@ -1,16 +1,37 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { agenticSolutions } from '../../constants/data';
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { agenticSolutions } from "../../constants/data";
 
 const Services: React.FC = () => {
-  const duplicatedSolutions = [];
-  for (let i = 0; i < 8; i++) {
-    duplicatedSolutions.push(...agenticSolutions);
-  }
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) container.scrollLeft = 0;
+  }, []);
+
+  // ✅ Faster scroll with acceleration feel
+  const scroll = (direction: "left" | "right") => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollAmount = 600; // ⬆️ increased for faster movement
+
+    // remove delay lag by turning off smooth only during repeated clicks
+    container.scrollTo({
+      left:
+        direction === "left"
+          ? container.scrollLeft - scrollAmount
+          : container.scrollLeft + scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <section id="services" className="relative pb-32 px-6">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <motion.div
           className="text-center mb-20"
           initial={{ opacity: 0, y: 30 }}
@@ -24,41 +45,30 @@ const Services: React.FC = () => {
             </span>
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Intelligent AI agents designed to automate and optimize your business processes
+            Intelligent AI agents designed to automate and optimize your
+            business processes
           </p>
         </motion.div>
 
-        <div className="relative overflow-hidden mt-16">
-          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none"
-               style={{
-                 maskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 100%)',
-                 WebkitMaskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 100%)'
-               }}
-          />
-          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none"
-               style={{
-                 maskImage: 'linear-gradient(to left, black 0%, black 40%, transparent 100%)',
-                 WebkitMaskImage: 'linear-gradient(to left, black 0%, black 40%, transparent 100%)'
-               }}
-          />
-
-          <motion.div
-            className="flex gap-5"
-            animate={{
-              x: [0, -2035],
-            }}
-            transition={{
-              x: {
-                duration: 40,
-                repeat: Infinity,
-                ease: "linear",
-              },
-            }}
+        {/* Arrows + Scroll Container */}
+        <div className="relative mt-16">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll("left")}
+            className="absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-gray-800/90 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition active:scale-95"
           >
-            {duplicatedSolutions.map((solution, index) => (
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          {/* Scrollable Row */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-5 overflow-x-auto overflow-y-hidden custom-scrollbar-hide scroll-smooth snap-x snap-mandatory w-full px-10"
+          >
+            {agenticSolutions.map((solution, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[300px] p-6 rounded-xl bg-gradient-to-br from-gray-900/90 to-gray-800/80 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 group"
+                className="flex-shrink-0 w-[300px] snap-start p-6 rounded-xl bg-gradient-to-br from-gray-900/90 to-gray-800/80 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 group"
                 whileHover={{ scale: 0.98 }}
               >
                 <div className="flex flex-col items-center text-center space-y-3">
@@ -74,9 +84,28 @@ const Services: React.FC = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll("right")}
+            className="absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-gray-800/90 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition active:scale-95"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
+      {/* Hide Scrollbar */}
+      <style>{`
+        .custom-scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .custom-scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };

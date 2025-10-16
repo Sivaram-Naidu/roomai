@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import PerformanceOptimizer from './components/PerformanceOptimizer';
-import Navigation from './components/sections/Navigation';
-import Hero from './components/sections/Hero';
-import Services from './components/sections/Services';
-import Workflow from './components/sections/Workflow';
-import Internship from './components/sections/Internship';
-import CTA from './components/sections/CTA';
-import Footer from './components/sections/Footer';
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import Navigation from "./components/sections/Navigation";
+import Hero from "./components/sections/Hero";
+import Services from "./components/sections/Services";
+import Workflow from "./components/sections/Workflow";
+import Internship from "./components/sections/Internship";
+import CTA from "./components/sections/CTA";
+import Footer from "./components/sections/Footer";
 
 const originalConsoleError = console.error;
 console.error = (...args: any[]) => {
   const message = args[0];
-  if (typeof message === 'string' && message.includes('Missing property')) {
+  if (typeof message === "string" && message.includes("Missing property")) {
     return;
   }
   originalConsoleError.apply(console, args);
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   const [activeWorkflowNode, setActiveWorkflowNode] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   useEffect(() => {
     const interval = setInterval(() => {
