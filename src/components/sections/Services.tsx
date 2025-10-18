@@ -11,22 +11,51 @@ const Services: React.FC = () => {
     if (container) container.scrollLeft = 0;
   }, []);
 
-  // ✅ Faster scroll with acceleration feel
+  // ----- START: MODIFIED FUNCTION -----
   const scroll = (direction: "left" | "right") => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollAmount = 600; // ⬆️ increased for faster movement
+    // Card width is 300px + gap-5 (1.25rem = 20px)
+    const scrollAmount = 320;
 
-    // remove delay lag by turning off smooth only during repeated clicks
-    container.scrollTo({
-      left:
-        direction === "left"
-          ? container.scrollLeft - scrollAmount
-          : container.scrollLeft + scrollAmount,
-      behavior: "smooth",
-    });
+    if (direction === "left") {
+      // Check if we are at the beginning
+      if (container.scrollLeft < 5) {
+        // At the start, loop to the end
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        container.scrollTo({
+          left: maxScroll,
+          behavior: "smooth",
+        });
+      } else {
+        // Not at the start, scroll left
+        container.scrollTo({
+          left: container.scrollLeft - scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      // direction === "right"
+      const maxScroll = container.scrollWidth - container.clientWidth;
+
+      // Check if we are at the end (with a 5px buffer)
+      if (container.scrollLeft >= maxScroll - 5) {
+        // At the end, loop to the beginning
+        container.scrollTo({
+          left: 0,
+          behavior: "smooth",
+        });
+      } else {
+        // Not at the end, scroll right
+        container.scrollTo({
+          left: container.scrollLeft + scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    }
   };
+  // ----- END: MODIFIED FUNCTION -----
 
   return (
     <section id="services" className="relative pb-32 px-6">

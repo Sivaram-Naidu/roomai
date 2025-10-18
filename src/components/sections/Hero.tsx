@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Play } from 'lucide-react';
-import AnimatedBackground from '../AnimatedBackground';
-import HeroAnimation from '../HeroAnimation';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Play } from "lucide-react";
+import AnimatedBackground from "../AnimatedBackground";
+import HeroAnimation from "../HeroAnimation";
 
 const Hero: React.FC = () => {
   return (
@@ -29,8 +29,9 @@ const Hero: React.FC = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-xl">
-            Transform your business operations with sophisticated AI agents that understand,
-            learn, and execute with precision across every aspect of your workflow.
+            Transform your business operations with sophisticated AI agents that
+            understand, learn, and execute with precision across every aspect of
+            your workflow.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

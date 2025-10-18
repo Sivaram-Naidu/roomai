@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { GraduationCap } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { GraduationCap } from "lucide-react";
 
 const Internship: React.FC = () => {
   return (
@@ -19,7 +19,8 @@ const Internship: React.FC = () => {
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Join our internship program and gain hands-on experience with cutting-edge AI technologies
+            Join our internship program and gain hands-on experience with
+            cutting-edge AI technologies
           </p>
         </motion.div>
 
@@ -36,16 +37,23 @@ const Internship: React.FC = () => {
                 <GraduationCap className="w-8 h-8 text-white" />
               </div>
 
-              <div className="px-6 py-3 rounded-full bg-orange-500/20 border border-orange-500/50 mb-6">
-                <span className="text-lg font-semibold text-orange-400">
-                  Opening Soon
-                </span>
-              </div>
+              {/* ----- START: MODIFIED SECTION ----- */}
 
-              <p className="text-lg text-gray-300 max-w-2xl text-center">
-                Join our upcoming internship program and gain hands-on experience building cutting-edge AI solutions.
-                Stay tuned for application details!
+              <p className="text-lg text-gray-300 max-w-2xl text-center mb-8">
+                Ready to kickstart your career in AI? Explore our open roles and
+                apply to join the next wave of innovators.
               </p>
+
+              <a
+                href="internships.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-8 py-3 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                View Openings
+              </a>
+
+              {/* ----- END: MODIFIED SECTION ----- */}
             </div>
           </motion.div>
         </div>
