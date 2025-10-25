@@ -4,127 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apply for Internship - AgentRoomAI</title>
-    <style>
-      body {
-        background-color: #000;
-        color: #e5e7eb;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
 
-      /* Glassmorphism form container */
-      .form-container {
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        padding: 30px;
-        width: 100%;
-        max-width: 600px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
-
-      .form-container h1 {
-        font-size: 2.5em;
-        text-align: center;
-        margin-bottom: 20px;
-        background: linear-gradient(to right, #fb923c, #f97316);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .form-group {
-        margin-bottom: 20px;
-      }
-
-      .form-group label {
-        display: block;
-        font-size: 1.1em;
-        color: #a1a1aa;
-        margin-bottom: 8px;
-      }
-
-      .form-group label.note {
-        font-size: 0.9em;
-        color: #71717a; /* Even softer gray */
-        margin-top: -5px;
-        margin-bottom: 8px;
-      }
-
-      /* Style for text inputs and dropdowns */
-      .form-control {
-        width: 100%;
-        padding: 12px;
-        background-color: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: #fff;
-        font-size: 1em;
-        box-sizing: border-box; /* Fixes padding issue */
-      }
-
-      select option {
-        background: #333;
-        color: #fff;
-      }
-
-      /* Submit Button (Orange Gradient) */
-      .submit-btn {
-        width: 100%;
-        padding: 14px;
-        background-image: linear-gradient(to right, #f97316, #ea580c);
-        color: #fff;
-        text-decoration: none;
-        font-weight: bold;
-        border: none;
-        border-radius: 9999px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .submit-btn:disabled {
-        background: #555;
-        cursor: not-allowed;
-      }
-
-      /* Message for success or error */
-      #form-message {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 1.1em;
-      }
-      .message-success {
-        color: #22c55e;
-      }
-      .message-error {
-        color: #ef4444;
-      }
-    </style>
+    <!-- Link to the new external CSS file -->
+    <link rel="stylesheet" href="apply.css" />
   </head>
   <body>
     <div class="form-container">
       <form id="application-form">
         <h1>Internship Application</h1>
 
-        <div class="form-group">
-          <label for="Role">Applying for Role</label>
-          <select id="Role" name="Role" class="form-control" required>
-            <option value="">Select Role</option>
-            <option value="AI Research Intern">AI Research Intern</option>
-            <option value="Software Engineer Intern (AI/ML)">
-              Software Engineer Intern (AI/ML)
-            </option>
-            <option value="Data Science Intern">Data Science Intern</option>
-          </select>
-        </div>
+        <!-- This field is now hidden. It gets its value from the URL. -->
+        <input type="hidden" id="Role" name="Role" />
 
         <div class="form-group">
           <label for="FullName">Full Name</label>
@@ -171,6 +61,44 @@
         </div>
 
         <div class="form-group">
+          <label for="GitHubLink">GitHub Profile Link</label>
+          <input
+            type="url"
+            id="GitHubLink"
+            name="GitHubLink"
+            class="form-control"
+            placeholder="https://github.com/..."
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="LinkedInLink">LinkedIn Profile Link</label>
+          <input
+            type="url"
+            id="LinkedInLink"
+            name="LinkedInLink"
+            class="form-control"
+            placeholder="https://linkedin.com/in/..."
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="PortfolioLink">Portfolio Link</label>
+          <label for="PortfolioLink" class="note"
+            >(Optional) Your personal website or portfolio.</label
+          >
+          <input
+            type="url"
+            id="PortfolioLink"
+            name="PortfolioLink"
+            class="form-control"
+            placeholder="https://..."
+          />
+        </div>
+
+        <div class="form-group">
           <label for="ResumeLink">Resume Link</label>
           <label for="ResumeLink" class="note"
             >Paste a link to your resume (e.g., Google Drive, LinkedIn). Make
@@ -195,24 +123,24 @@
     </div>
 
     <script>
-      // --- SCRIPT TO AUTO-SELECT ROLE ---
+      // --- SCRIPT TO AUTO-FILL HIDDEN ROLE FIELD ---
       window.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
         const role = urlParams.get("role");
         if (role) {
-          const roleSelect = document.getElementById("Role");
-          if (roleSelect) {
-            roleSelect.value = role;
+          const roleInput = document.getElementById("Role");
+          if (roleInput) {
+            roleInput.value = role;
           }
         }
       });
 
-      // --- SCRIPT TO SUBMIT FORM TO GOOGLE SHEET (UPDATED) ---
+      // --- SCRIPT TO SUBMIT FORM TO GOOGLE SHEET ---
       const form = document.getElementById("application-form");
       const submitButton = document.getElementById("submit-button");
       const messageDiv = document.getElementById("form-message");
 
-      // This URL should be correct from your last deployment
+      // This is your deployed Web App URL
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbyqfUeitLB65q3LcuNFGcb-vzdFO9xYj0Zxze6RDwFvWI2eitJVUUfgdJ6j1_Qg6yXp/exec";
 
@@ -223,10 +151,10 @@
         messageDiv.textContent = "";
         messageDiv.className = "";
 
-        // We send the FormData object directly
+        // This FormData method automatically picks up all fields
         fetch(SCRIPT_URL, {
           method: "POST",
-          body: new FormData(form), // This is the new, more reliable method
+          body: new FormData(form),
         })
           .then((response) => response.json())
           .then((res) => {
@@ -234,6 +162,10 @@
               messageDiv.textContent = "Application submitted successfully!";
               messageDiv.className = "message-success";
               form.reset();
+              // Since the role is hidden, we must re-set it after reset()
+              const urlParams = new URLSearchParams(window.location.search);
+              const role = urlParams.get("role");
+              if (role) document.getElementById("Role").value = role;
             } else {
               throw new Error(res.message || "An unknown error occurred.");
             }

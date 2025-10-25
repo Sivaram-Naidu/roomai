@@ -4,132 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Internships - AgentRoomAI</title>
-    <style>
-      /* Base styles from your main page */
-      body {
-        background-color: #000;
-        color: #e5e7eb; /* Light gray for text */
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-      }
 
-      /* Container to center content */
-      .container {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      /* Header and Footer styles to match the dark theme */
-      header,
-      footer {
-        padding: 1.5rem 0;
-        text-align: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      footer {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-bottom: none;
-        margin-top: 50px;
-      }
-
-      header .logo {
-        font-size: 1.8em;
-        font-weight: bold;
-        text-decoration: none;
-        background: linear-gradient(to right, #fff, #a1a1aa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      /* Main internships section */
-      .internship-container {
-        padding: 60px 20px;
-        text-align: center;
-      }
-
-      .internship-header h1 {
-        font-size: 3.5em;
-        margin-bottom: 20px;
-        /* Orange gradient for the main title */
-        background: linear-gradient(to right, #fb923c, #f97316);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .internship-header p {
-        font-size: 1.2em;
-        color: #a1a1aa; /* Softer gray for subtitles */
-        max-width: 700px;
-        margin: 0 auto 50px auto;
-      }
-
-      .internship-listings {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 25px;
-      }
-
-      /* Glassmorphism card effect from your landing page */
-      .internship-card {
-        background-color: rgba(
-          255,
-          255,
-          255,
-          0.05
-        ); /* Semi-transparent white */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        padding: 25px;
-        width: 320px;
-        text-align: left;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .internship-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
-
-      .internship-card h3 {
-        font-size: 1.7em;
-        color: #fff;
-        margin-top: 0;
-        margin-bottom: 15px;
-      }
-
-      .internship-card p {
-        font-size: 1em;
-        color: #d4d4d8;
-        margin-bottom: 10px;
-      }
-
-      /* Apply button with orange gradient */
-      .apply-btn {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 12px 25px;
-        background-image: linear-gradient(to right, #f97316, #ea580c);
-        color: #fff;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 9999px; /* Pill shape */
-        transition: all 0.3s ease;
-      }
-
-      .apply-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
-      }
-    </style>
+    <!-- Removed the <style> block and added this link -->
+    <link rel="stylesheet" href="internships.css" />
   </head>
   <body>
     <header>
@@ -149,61 +26,100 @@
           </p>
         </div>
 
+        <!-- ===== START: CARD LISTINGS ===== -->
         <div class="internship-listings">
+          <!-- Card 1: AI Agents Intern -->
           <div class="internship-card">
-            <h3>AI Research Intern</h3>
-            <p><strong>📍 Location:</strong> Remote</p>
-            <p><strong>⏰ Duration:</strong> 12 Weeks</p>
-            <p>
-              Dive deep into machine learning models and contribute to our core
-              research. Ideal for students with a strong background in
-              mathematics and algorithms.
-            </p>
-            <a
-              href="apply.html?role=AI%20Research%20Intern"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="apply-btn"
-              >Apply Now</a
-            >
+            <div class="card-content">
+              <h3>AI Agents Development Intern</h3>
+              <p><strong>Duration:</strong> 3-6 Months</p>
+              <p>
+                Join our team to work on cutting-edge AI agent technologies,
+                including LLMs, Multi-Agent Systems, and Agentic AI Workflows.
+              </p>
+            </div>
+            <div class="card-buttons">
+              <button class="more-info-btn" data-index="0">More Info</button>
+              <a
+                href="apply.html?role=AI%20Agents%20Development%20Intern"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="apply-btn"
+                >Apply Now</a
+              >
+            </div>
           </div>
 
+          <!-- Card 2: Computer Vision Intern -->
           <div class="internship-card">
-            <h3>Software Engineer Intern (AI/ML)</h3>
-            <p><strong>📍 Location:</strong> Hybrid</p>
-            <p><strong>⏰ Duration:</strong> 12 Weeks</p>
-            <p>
-              Work on developing and deploying our AI agents. You'll gain
-              experience with Python, cloud infrastructure, and large-scale
-              application development.
-            </p>
-            <a
-              href="apply.html?role=Software%20Engineer%20Intern%20(AI/ML)"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="apply-btn"
-              >Apply Now</a
-            >
+            <div class="card-content">
+              <h3>Computer Vision Intern</h3>
+              <p><strong>Duration:</strong> 3-6 Months</p>
+              <p>
+                Work on computer vision projects, including image processing,
+                object detection, and image classification, developing and
+                implementing CV algorithms.
+              </p>
+            </div>
+            <div class="card-buttons">
+              <button class="more-info-btn" data-index="1">More Info</button>
+              <a
+                href="apply.html?role=Computer%20Vision%20Intern"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="apply-btn"
+                >Apply Now</a
+              >
+            </div>
           </div>
 
+          <!-- Card 3: NLP Intern -->
           <div class="internship-card">
-            <h3>Data Science Intern</h3>
-            <p><strong>📍 Location:</strong> In-Office</p>
-            <p><strong>⏰ Duration:</strong> 10 Weeks</p>
-            <p>
-              Analyze complex datasets to uncover insights that drive our
-              product strategy. Strong SQL and data visualization skills are a
-              must.
-            </p>
-            <a
-              href="apply.html?role=Data%20Science%20Intern"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="apply-btn"
-              >Apply Now</a
-            >
+            <div class="card-content">
+              <h3>NLP & Language Modeling Intern</h3>
+              <p><strong>Duration:</strong> 3-6 Months</p>
+              <p>
+                Join our team to work on NLP projects, including text
+                classification, sentiment analysis, and language modeling,
+                developing NLP models and algorithms.
+              </p>
+            </div>
+            <div class="card-buttons">
+              <button class="more-info-btn" data-index="2">More Info</button>
+              <a
+                href="apply.html?role=NLP%20and%20Language%20Modeling%20Intern"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="apply-btn"
+                >Apply Now</a
+              >
+            </div>
+          </div>
+
+          <!-- Card 4: ML Intern -->
+          <div class="internship-card">
+            <div class="card-content">
+              <h3>Machine Learning Intern</h3>
+              <p><strong>Duration:</strong> 3-6 Months</p>
+              <p>
+                Work on machine learning projects, including model development,
+                training, and deployment. You'll contribute to developing and
+                implementing ML models.
+              </p>
+            </div>
+            <div class="card-buttons">
+              <button class="more-info-btn" data-index="3">More Info</button>
+              <a
+                href="apply.html?role=Machine%20Learning%20Intern"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="apply-btn"
+                >Apply Now</a
+              >
+            </div>
           </div>
         </div>
+        <!-- ===== END: CARD LISTINGS ===== -->
       </section>
     </main>
 
@@ -212,5 +128,153 @@
         <p>&copy; 2025 AgentRoomAI. All rights reserved.</p>
       </div>
     </footer>
+
+    <!-- ===== MODAL (POP-UP) HTML STRUCTURE ===== -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal-content" id="modal-content">
+        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        <h3 id="modal-title"></h3>
+
+        <!-- New 2-Column Body -->
+        <div class="modal-body">
+          <div class="modal-left">
+            <p id="modal-description"></p>
+          </div>
+          <div class="modal-right">
+            <h4>Technical Skills:</h4>
+            <ul id="modal-skills"></ul>
+
+            <h4>Nice to Have:</h4>
+            <ul id="modal-nice-to-have"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT FOR MODAL ===== -->
+    <script>
+      // 1. Store all the detailed internship data
+      const internshipData = [
+        {
+          title: "AI Agents Development Intern",
+          description:
+            "Join our team to work on cutting-edge AI agent technologies, including Large Language Models (LLM), Multi-Agent Systems (MCP), and Agentic AI Workflows. As an intern, you'll contribute to developing and implementing AI agents that can reason, learn, and interact with their environment.",
+          skills: [
+            "Programming languages: Python, familiarity with frameworks like LangChain or LLaMA",
+            "Knowledge of LLM models and their applications",
+            "Understanding of multi-agent systems and agentic AI workflows",
+            "Familiarity with protocols like HTTP, WebSockets, or gRPC",
+            "Strong problem-solving skills and attention to detail",
+          ],
+          niceToHave: [
+            "Experience with containerization (Docker) and orchestration (Kubernetes)",
+            "Knowledge of prompt engineering and fine-tuning LLMs",
+          ],
+        },
+        {
+          title: "Computer Vision Intern",
+          description:
+            "Work on computer vision projects, including image processing, object detection, and image classification. As an intern, you'll contribute to developing and implementing computer vision algorithms and models.",
+          skills: [
+            "Programming languages: Python, familiarity with OpenCV, Pillow, or scikit-image",
+            "Knowledge of computer vision fundamentals (image processing, feature extraction, object detection)",
+            "Experience with deep learning frameworks like TensorFlow or PyTorch",
+            "Strong understanding of image processing techniques (filtering, thresholding, edge detection)",
+          ],
+          niceToHave: [
+            "Experience with image annotation tools and data labeling",
+            "Knowledge of 3D computer vision and point cloud processing",
+          ],
+        },
+        {
+          title: "NLP & Language Modeling Intern",
+          description:
+            "Join our team to work on NLP projects, including text classification, sentiment analysis, and language modeling. As an intern, you'll contribute to developing and implementing NLP models and algorithms.",
+          skills: [
+            "Programming languages: Python, familiarity with NLTK, spaCy, or gensim",
+            "Knowledge of NLP fundamentals (text preprocessing, tokenization, named entity recognition)",
+            "Experience with deep learning frameworks like TensorFlow or PyTorch",
+            "Strong understanding of language models (RNNs, LSTMs, Transformers)",
+          ],
+          niceToHave: [
+            "Experience with language model fine-tuning and evaluation metrics",
+            "Knowledge of multimodal NLP (text-image, text-speech)",
+          ],
+        },
+        {
+          title: "Machine Learning Intern",
+          description:
+            "Work on machine learning projects, including model development, training, and deployment. As an intern, you'll contribute to developing and implementing ML models and algorithms.",
+          skills: [
+            "Programming languages: Python, familiarity with scikit-learn, TensorFlow, or PyTorch",
+            "Knowledge of machine learning fundamentals (supervised, unsupervised, reinforcement learning)",
+            "Experience with data preprocessing, feature engineering, and model evaluation",
+            "Strong problem-solving skills and attention to detail",
+          ],
+          niceToHave: [
+            "Experience with hyperparameter tuning and model optimization",
+            "Knowledge of model interpretability and explainability techniques",
+          ],
+        },
+      ];
+
+      // 2. Get all the HTML elements we need to interact with
+      const moreInfoButtons = document.querySelectorAll(".more-info-btn");
+      const modalOverlay = document.getElementById("modal-overlay");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
+      const modalTitle = document.getElementById("modal-title");
+      const modalDescription = document.getElementById("modal-description");
+      const modalSkills = document.getElementById("modal-skills");
+      const modalNiceToHave = document.getElementById("modal-nice-to-have");
+
+      // 3. Function to open the modal and populate it with data
+      function openModal(index) {
+        const data = internshipData[index];
+
+        modalTitle.textContent = data.title;
+        modalDescription.textContent = data.description;
+
+        // Clear old list items
+        modalSkills.innerHTML = "";
+        modalNiceToHave.innerHTML = "";
+
+        // Populate skills
+        data.skills.forEach((skill) => {
+          const li = document.createElement("li");
+          li.textContent = skill;
+          modalSkills.appendChild(li);
+        });
+
+        // Populate nice-to-have
+        data.niceToHave.forEach((skill) => {
+          const li = document.createElement("li");
+          li.textContent = skill;
+          modalNiceToHave.appendChild(li);
+        });
+
+        modalOverlay.style.display = "flex";
+      }
+
+      // 4. Function to close the modal
+      function closeModal() {
+        modalOverlay.style.display = "none";
+      }
+
+      // 5. Add event listeners
+      moreInfoButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const index = button.getAttribute("data-index");
+          openModal(index);
+        });
+      });
+
+      modalCloseBtn.addEventListener("click", closeModal);
+      modalOverlay.addEventListener("click", (event) => {
+        // Only close if the user clicks on the overlay itself, not the content
+        if (event.target === modalOverlay) {
+          closeModal();
+        }
+      });
+    </script>
   </body>
 </html>
