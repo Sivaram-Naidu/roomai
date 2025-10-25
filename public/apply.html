@@ -11,7 +11,8 @@
   <body>
     <div class="form-container">
       <form id="application-form">
-        <h1>Internship Application</h1>
+        <!-- 1. The H1 now has an ID so we can change it -->
+        <h1 id="form-title">Internship Application</h1>
 
         <!-- This field is now hidden. It gets its value from the URL. -->
         <input type="hidden" id="Role" name="Role" />
@@ -128,10 +129,20 @@
         const urlParams = new URLSearchParams(window.location.search);
         const role = urlParams.get("role");
         if (role) {
+          // This part fills the hidden input
           const roleInput = document.getElementById("Role");
           if (roleInput) {
             roleInput.value = role;
           }
+
+          // 2. --- THIS IS THE NEW PART ---
+          // This part updates the H1 title
+          const titleElement = document.getElementById("form-title");
+          if (titleElement) {
+            // We replace the generic title with the specific role
+            titleElement.textContent = `Application for ${role}`;
+          }
+          // --- END OF NEW PART ---
         }
       });
 
