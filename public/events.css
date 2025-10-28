@@ -1,4 +1,4 @@
-/* Base styles from your main site */
+/* Base styles */
 body {
   background-color: #000;
   color: #e5e7eb;
@@ -9,14 +9,13 @@ body {
   line-height: 1.6;
 }
 
-/* Container to center content */
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-/* Header and Footer styles */
+/* Header and Footer */
 header,
 footer {
   padding: 1.5rem 0;
@@ -62,21 +61,21 @@ header .logo {
   margin: 0 auto 50px auto;
 }
 
-/* Grid layout for event cards */
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 25px;
+.events-listings {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 25px;
 }
 
-/* Glassmorphism card effect */
+/* Event card styling */
 .event-card {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 25px;
+  width: 320px;
   text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -88,6 +87,10 @@ header .logo {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+.event-card .card-content {
+  flex-grow: 1; /* Pushes button to bottom */
+}
+
 .event-card h3 {
   font-size: 1.7em;
   color: #fff;
@@ -95,40 +98,29 @@ header .logo {
   margin-bottom: 10px;
 }
 
-.event-card .event-info {
-  font-size: 1em;
-  color: #d4d4d8;
-  margin-bottom: 10px;
-}
-
-.event-card .event-description {
-  font-size: 0.95em;
-  color: #a1a1aa;
-  flex-grow: 1; /* Pushes button to bottom */
-  margin-bottom: 20px;
-}
-
-/* Price tag */
-.event-price {
-  font-size: 1.4em;
+.event-card .event-price {
+  font-size: 1.1em;
   font-weight: bold;
   color: #fb923c; /* Orange */
   margin-bottom: 15px;
 }
 
-.event-price.free {
-  color: #22c55e; /* Green for Free */
+.event-card p {
+  font-size: 1em;
+  color: #d4d4d8;
+  margin-bottom: 10px;
 }
 
-/* Register button (Orange Gradient) */
+/* Register button */
 .register-btn {
-  display: block;
+  display: block; /* Makes it take full width */
+  margin-top: 20px;
   padding: 12px 25px;
   background-image: linear-gradient(to right, #f97316, #ea580c);
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  border-radius: 9999px; /* Pill shape */
+  border-radius: 9999px;
   transition: all 0.3s ease;
   text-align: center;
 }

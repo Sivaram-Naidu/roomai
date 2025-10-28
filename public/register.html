@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register for Event - AgentRoomAI</title>
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <div class="form-container">
+      <form id="event-form">
+        <h1 id="form-title">Event Registration</h1>
+
+        <!-- This field is hidden. It gets its value from the URL. -->
+        <input type="hidden" id="EventName" name="EventName" />
+
+        <div class="form-group">
+          <label for="FullName">Full Name</label>
+          <input
+            type="text"
+            id="FullName"
+            name="FullName"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Email">Email Address</label>
+          <input
+            type="email"
+            id="Email"
+            name="Email"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Phone">Phone Number</label>
+          <input
+            type="tel"
+            id="Phone"
+            name="Phone"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="OrgName">College / Company Name</label>
+          <input
+            type="text"
+            id="OrgName"
+            name="OrgName"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="Role">Current Year / Job Title</label>
+          <input
+            type="text"
+            id="Role"
+            name="Role"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <!-- === PAYMENT SECTION === -->
+        <!-- This whole section is hidden by default and shown by JS -->
+        <div id="payment-section" class="hidden">
+          <div class="payment-info">
+            <p>
+              This is a paid event. Please complete your payment and enter the
+              Transaction ID below.
+            </p>
+            <a
+              href="https://razorpay.me/@dehsahkaiprivatelimited"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="payment-link"
+            >
+              Click Here to Pay Now
+            </a>
+          </div>
+
+          <div class="form-group">
+            <label for="PaymentID">Payment / Transaction ID</label>
+            <label for="PaymentID" class="note"
+              >Enter the ID you receive after successful payment.</label
+            >
+            <input
+              type="text"
+              id="PaymentID"
+              name="PaymentID"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <!-- === END PAYMENT SECTION === -->
+
+        <button type="submit" class="submit-btn" id="submit-button">
+          Register
+        </button>
+
+        <div id="form-message"></div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("event-form");
+      const submitButton = document.getElementById("submit-button");
+      const messageDiv = document.getElementById("form-message");
+      const formTitle = document.getElementById("form-title");
+      const eventNameInput = document.getElementById("EventName");
+
+      // Payment fields
+      const paymentSection = document.getElementById("payment-section");
+      const paymentIdInput = document.getElementById("PaymentID");
+
+      // ⬇️⬇️ YOUR NEW SCRIPT URL IS PASTED HERE ⬇️⬇️
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
+
+      // 1. Check URL for event info when page loads
+      window.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventName = urlParams.get("event");
+        const price = urlParams.get("price");
+
+        if (eventName) {
+          // Set the hidden event name field
+          eventNameInput.value = eventName;
+          // Update the title
+          formTitle.textContent = `Register for ${eventName}`;
+        }
+
+        if (price && price !== "free") {
+          // This is a PAID event
+          paymentSection.classList.remove("hidden"); // Show payment fields
+          paymentIdInput.required = true; // Make payment ID required
+          submitButton.textContent = "Submit Registration";
+        } else {
+          // This is a FREE event
+          paymentSection.classList.add("hidden"); // Hide payment fields
+          paymentIdInput.required = false; // Not required
+          submitButton.textContent = "Register for Free";
+        }
+      });
+
+      // 2. Handle form submission
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+        messageDiv.textContent = "";
+        messageDiv.className = "";
+
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          body: new FormData(form),
+        })
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.result === "success") {
+              messageDiv.textContent = "Registration successful!";
+              messageDiv.className = "message-success";
+              form.reset();
+              // Re-fill the hidden event name after reset
+              const urlParams = new URLSearchParams(window.location.search);
+              eventNameInput.value = urlParams.get("event");
+            } else {
+              throw new Error(res.message || "An unknown error occurred.");
+            }
+          })
+          .catch((error) => {
+            messageDiv.textContent = `Error: ${error.message}`;
+            messageDiv.className = "message-error";
+          })
+          .finally(() => {
+            submitButton.disabled = false;
+            // Reset button text based on price
+            const urlParams = new URLSearchParams(window.location.search);
+            const price = urlParams.get("price");
+            if (price && price !== "free") {
+              submitButton.textContent = "Submit Registration";
+            } else {
+              submitButton.textContent = "Register for Free";
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

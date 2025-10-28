@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Events - AgentRoomAI</title>
-    <!-- Link to the new events.css file -->
     <link rel="stylesheet" href="events.css" />
   </head>
   <body>
@@ -19,86 +18,73 @@
         <div class="events-header">
           <h1>Workshops & Events</h1>
           <p>
-            Level up your skills with our expert-led workshops and webinars on
-            the latest in AI and tech.
+            Join our expert-led workshops and events to skill up in the world of
+            AI.
           </p>
         </div>
 
-        <div class="events-grid">
-          <!-- Event Card 1: Free Webinar -->
+        <div class="events-listings">
+          <!-- Event Card 1 (Paid) -->
           <div class="event-card">
-            <span class="event-info">Nov 15, 2025 • 7:00 PM IST • Webinar</span>
-            <h3>Intro to Agentic AI Workflows</h3>
-            <p class="event-description">
-              Join this free 1-hour webinar to understand the fundamentals of
-              Agentic AI and how it's changing business automation.
-            </p>
-            <div class="event-price free">Free</div>
+            <div class="card-content">
+              <h3>Advanced Agentic Workflows</h3>
+              <p class="event-price">Price: ₹4999</p>
+              <p>
+                A 3-day deep-dive workshop into building multi-agent systems
+                with LangChain and autonomous function calling.
+              </p>
+            </div>
+            <!-- This link points to your register.html form -->
             <a
-              href="#"
-              class="register-btn"
+              href="register.html?event=Advanced%20Agentic%20Workflows&price=4999"
               target="_blank"
               rel="noopener noreferrer"
-              >Register Now</a
+              class="register-btn"
             >
+              Register Now
+            </a>
           </div>
 
-          <!-- Event Card 2: Paid Workshop -->
+          <!-- Event Card 2 (Free) -->
           <div class="event-card">
-            <span class="event-info"
-              >Nov 22, 2025 • 10:00 AM - 4:00 PM IST • Workshop</span
-            >
-            <h3>Deep Dive into LangChain</h3>
-            <p class="event-description">
-              A full-day, hands-on workshop. Build, test, and deploy your own AI
-              agents using Python and LangChain. Limited seats!
-            </p>
-            <div class="event-price">₹2,500</div>
+            <div class="card-content">
+              <h3>Intro to Prompt Engineering</h3>
+              <p class="event-price">FREE</p>
+              <p>
+                A 90-minute free webinar covering the fundamentals of prompt
+                engineering for better results from LLMs.
+              </p>
+            </div>
+            <!-- This link points to your register.html form -->
             <a
-              href="#"
-              class="register-btn"
+              href="register.html?event=Intro%20to%20Prompt%20Engineering&price=free"
               target="_blank"
               rel="noopener noreferrer"
-              >Register Now</a
+              class="register-btn"
             >
+              Register for Free
+            </a>
           </div>
 
-          <!-- Event Card 3: Paid Workshop -->
+          <!-- Event Card 3 (Paid) -->
           <div class="event-card">
-            <span class="event-info"
-              >Dec 5, 2025 • 11:00 AM IST • Workshop</span
-            >
-            <h3>Computer Vision with OpenCV & PyTorch</h3>
-            <p class="event-description">
-              Learn to build and train object detection models from scratch in
-              this 3-hour, project-based workshop.
-            </p>
-            <div class="event-price">₹1,500</div>
+            <div class="card-content">
+              <h3>Computer Vision with OpenCV</h3>
+              <p class="event-price">Price: ₹1500</p>
+              <p>
+                A 2-day hands-on workshop on practical computer vision, from
+                image processing to object detection.
+              </p>
+            </div>
+            <!-- This link points to your register.html form -->
             <a
-              href="#"
-              class="register-btn"
+              href="register.html?event=Computer%20Vision%20with%20OpenCV&price=1500"
               target="_blank"
               rel="noopener noreferrer"
-              >Register Now</a
-            >
-          </div>
-
-          <!-- Event Card 4: Placeholder -->
-          <div class="event-card">
-            <span class="event-info">Coming Jan 2026 • Workshop</span>
-            <h3>Advanced NLP with Transformers</h3>
-            <p class="event-description">
-              Explore the architecture of models like BERT and GPT, and learn
-              fine-tuning techniques for custom tasks.
-            </p>
-            <div class="event-price">₹4,000</div>
-            <a
-              href="#"
               class="register-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Register Now</a
             >
+              Register Now
+            </a>
           </div>
         </div>
       </section>
