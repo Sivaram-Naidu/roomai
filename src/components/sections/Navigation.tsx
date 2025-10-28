@@ -14,27 +14,24 @@ const Navigation: React.FC<NavigationProps> = ({
   return (
     <nav className="relative z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* This div uses 'flex items-center' to align the logo and text in a line */}
+        {/* Logo and Site Title */}
         <motion.div
           className="flex items-center space-x-3"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Your logo from the 'public' folder */}
           <img
             src="/logo.png"
             alt="Agent Room AI Logo"
             className="w-10 h-10 rounded-xl"
           />
-
-          {/* Your site title */}
           <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
             Agent Room AI
           </span>
         </motion.div>
 
-        {/* This is the desktop navigation */}
+        {/* === DESKTOP NAVIGATION === */}
         <motion.div
           className="hidden md:flex items-center space-x-8"
           initial={{ opacity: 0, y: -20 }}
@@ -54,6 +51,17 @@ const Navigation: React.FC<NavigationProps> = ({
             Process
           </a>
 
+          {/* --- ADD THIS NEW LINK --- */}
+          <a
+            href="events.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-orange-400 transition-colors font-medium"
+          >
+            Events
+          </a>
+          {/* --- END NEW LINK --- */}
+
           <a
             href="internships.html"
             target="_blank"
@@ -68,6 +76,7 @@ const Navigation: React.FC<NavigationProps> = ({
           </button>
         </motion.div>
 
+        {/* Mobile Menu Button */}
         <motion.button
           className="md:hidden p-2 text-white hover:text-orange-400 transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -83,7 +92,7 @@ const Navigation: React.FC<NavigationProps> = ({
         </motion.button>
       </div>
 
-      {/* This is the mobile navigation dropdown */}
+      {/* === MOBILE NAVIGATION DROPDOWN === */}
       <motion.div
         className="md:hidden absolute top-full left-0 right-0 bg-gray-900/95 backdrop-blur-lg border-t border-gray-800"
         initial={{ opacity: 0, height: 0 }}
@@ -110,6 +119,19 @@ const Navigation: React.FC<NavigationProps> = ({
             >
               Process
             </a>
+
+            {/* --- ADD THIS NEW LINK --- */}
+            <a
+              href="events.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-white hover:text-orange-400 transition-colors font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Events
+            </a>
+            {/* --- END NEW LINK --- */}
+
             <a
               href="internships.html"
               target="_blank"
