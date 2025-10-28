@@ -8,11 +8,13 @@
   </head>
   <body>
     <div class="form-container">
-      <form id="event-form">
-        <h1 id="form-title">Event Registration</h1>
+      <form id="registration-form">
+        <h1 id="event-title">Event Registration</h1>
 
-        <!-- This field is hidden. It gets its value from the URL. -->
+        <!-- This field is hidden, but its value is set by JavaScript -->
         <input type="hidden" id="EventName" name="EventName" />
+        <!-- This field is also hidden and used by JS -->
+        <input type="hidden" id="PaymentID" name="PaymentID" value="N/A" />
 
         <div class="form-group">
           <label for="FullName">Full Name</label>
@@ -58,52 +60,33 @@
           />
         </div>
 
-        <div class="form-group">
-          <label for="Role">Current Year / Job Title</label>
-          <input
-            type="text"
-            id="Role"
-            name="Role"
-            class="form-control"
-            required
-          />
-        </div>
-
-        <!-- === PAYMENT SECTION === -->
-        <!-- This whole section is hidden by default and shown by JS -->
-        <div id="payment-section" class="hidden">
-          <div class="payment-info">
-            <p>
-              This is a paid event. Please complete your payment and enter the
-              Transaction ID below.
-            </p>
-            <a
-              href="https://razorpay.me/@dehsahkaiprivatelimited"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="payment-link"
-            >
-              Click Here to Pay Now
-            </a>
-          </div>
-
-          <div class="form-group">
-            <label for="PaymentID">Payment / Transaction ID</label>
-            <label for="PaymentID" class="note"
-              >Enter the ID you receive after successful payment.</label
-            >
+        <!-- Payment section - hidden by default -->
+        <div id="payment-section" style="display: none">
+          <p class="payment-instructions">
+            You are registering for a paid event. Please complete your payment,
+            then paste the Transaction ID below to confirm your registration.
+          </p>
+          <a
+            href="https://razorpay.me/@dehsahkaiprivatelimited"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="payment-btn"
+          >
+            Pay Now
+          </a>
+          <div class="form-group" style="margin-top: 20px">
+            <label for="PaymentIDInput">Transaction ID</label>
             <input
               type="text"
-              id="PaymentID"
-              name="PaymentID"
+              id="PaymentIDInput"
               class="form-control"
+              placeholder="Paste your Transaction ID here"
             />
           </div>
         </div>
-        <!-- === END PAYMENT SECTION === -->
 
         <button type="submit" class="submit-btn" id="submit-button">
-          Register
+          Register Now
         </button>
 
         <div id="form-message"></div>
@@ -111,49 +94,53 @@
     </div>
 
     <script>
-      const form = document.getElementById("event-form");
+      const form = document.getElementById("registration-form");
       const submitButton = document.getElementById("submit-button");
       const messageDiv = document.getElementById("form-message");
-      const formTitle = document.getElementById("form-title");
-      const eventNameInput = document.getElementById("EventName");
 
-      // Payment fields
+      // Fields
+      const eventTitle = document.getElementById("event-title");
+      const hiddenEventName = document.getElementById("EventName");
+      const hiddenPaymentID = document.getElementById("PaymentID");
       const paymentSection = document.getElementById("payment-section");
-      const paymentIdInput = document.getElementById("PaymentID");
+      const paymentIDInput = document.getElementById("PaymentIDInput");
 
-      // ⬇️⬇️ YOUR NEW SCRIPT URL IS PASTED HERE ⬇️⬇️
+      // This is your new Event Script URL
       const SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
 
-      // 1. Check URL for event info when page loads
+      let eventPrice = "free";
+
+      // 1. Get Event Details from URL
       window.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const eventName = urlParams.get("event");
-        const price = urlParams.get("price");
+        const eventName = urlParams.get("event") || "Event Registration";
+        eventPrice = urlParams.get("price") || "free";
 
-        if (eventName) {
-          // Set the hidden event name field
-          eventNameInput.value = eventName;
-          // Update the title
-          formTitle.textContent = `Register for ${eventName}`;
-        }
+        // Set the page title and hidden form field
+        eventTitle.textContent = eventName;
+        hiddenEventName.value = eventName;
 
-        if (price && price !== "free") {
-          // This is a PAID event
-          paymentSection.classList.remove("hidden"); // Show payment fields
-          paymentIdInput.required = true; // Make payment ID required
-          submitButton.textContent = "Submit Registration";
+        // Check if this is a paid event
+        if (eventPrice !== "free") {
+          paymentSection.style.display = "block";
+          submitButton.textContent = "Confirm Registration";
+          // Make the payment ID field required
+          paymentIDInput.required = true;
         } else {
-          // This is a FREE event
-          paymentSection.classList.add("hidden"); // Hide payment fields
-          paymentIdInput.required = false; // Not required
           submitButton.textContent = "Register for Free";
         }
       });
 
-      // 2. Handle form submission
+      // 2. Handle Form Submission
       form.addEventListener("submit", function (e) {
         e.preventDefault();
+
+        // If it's a paid event, copy the visible ID to the hidden field
+        if (eventPrice !== "free") {
+          hiddenPaymentID.value = paymentIDInput.value;
+        }
+
         submitButton.disabled = true;
         submitButton.textContent = "Submitting...";
         messageDiv.textContent = "";
@@ -166,12 +153,14 @@
           .then((response) => response.json())
           .then((res) => {
             if (res.result === "success") {
-              messageDiv.textContent = "Registration successful!";
+              messageDiv.textContent =
+                "Registration successful! Check your email for confirmation.";
               messageDiv.className = "message-success";
               form.reset();
-              // Re-fill the hidden event name after reset
+              // After reset, re-populate the hidden event name
               const urlParams = new URLSearchParams(window.location.search);
-              eventNameInput.value = urlParams.get("event");
+              hiddenEventName.value =
+                urlParams.get("event") || "Event Registration";
             } else {
               throw new Error(res.message || "An unknown error occurred.");
             }
@@ -183,10 +172,8 @@
           .finally(() => {
             submitButton.disabled = false;
             // Reset button text based on price
-            const urlParams = new URLSearchParams(window.location.search);
-            const price = urlParams.get("price");
-            if (price && price !== "free") {
-              submitButton.textContent = "Submit Registration";
+            if (eventPrice !== "free") {
+              submitButton.textContent = "Confirm Registration";
             } else {
               submitButton.textContent = "Register for Free";
             }
