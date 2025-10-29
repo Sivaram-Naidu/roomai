@@ -4,8 +4,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
 
-// --- START: MODIFIED IMPORT ---
-// Import the CommonJS module correctly as suggested by the error
 import razorpayUtils from "razorpay/dist/utils/razorpay-utils.js";
 const { validate } = razorpayUtils;
 // --- END: MODIFIED IMPORT ---
@@ -15,12 +13,10 @@ app.use(cors());
 // Use bodyParser.json() as a function
 app.use(bodyParser.json());
 
-// --- ⬇️⬇️ PASTE YOUR KEYS AND URL HERE ⬇️⬇️ ---
 const RAZORPAY_KEY_ID = "rzp_live_RXfGkXxK4K1Rra";
 const RAZORPAY_KEY_SECRET = "RPQz9jl8Dh5GAqAhaKx8pLDK";
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
-// --- ⬆️⬆️ PASTE YOUR KEYS AND URL HERE ⬆️⬆️ ---
 
 const razorpay = new Razorpay({
   key_id: RAZORPAY_KEY_ID,

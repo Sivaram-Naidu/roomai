@@ -18,73 +18,66 @@
         <div class="events-header">
           <h1>Workshops & Events</h1>
           <p>
-            Join our expert-led workshops and events to skill up in the world of
-            AI.
+            Join our expert-led workshops and events. Level up your skills in
+            AI, from generative models to agentic workflows.
           </p>
         </div>
 
         <div class="events-listings">
-          <!-- Event Card 1 (Paid) -->
+          <!-- Card 1: Free Workshop -->
           <div class="event-card">
             <div class="card-content">
-              <h3>Advanced Agentic Workflows</h3>
-              <p class="event-price">Price: ₹4999</p>
+              <div class="event-tag free">Free</div>
+              <h3>Intro to Agentic AI</h3>
+              <p class="event-date">November 5, 2025</p>
               <p>
-                A 3-day deep-dive workshop into building multi-agent systems
-                with LangChain and autonomous function calling.
+                A free introductory webinar on the power of agentic AI and how
+                it's changing the industry. No coding required.
               </p>
             </div>
-            <!-- This link points to your register.html form -->
+            <!-- This link passes a price of 0 -->
+            <a
+              href="register.html?event=Intro%20to%20Agentic%20AI&price=0"
+              class="register-btn"
+              >Register for Free</a
+            >
+          </div>
+
+          <!-- Card 2: Paid Workshop (Price Updated to 1) -->
+          <div class="event-card">
+            <div class="card-content">
+              <div class="event-tag paid">Paid</div>
+              <h3>Computer Vision with OpenCV</h3>
+              <p class="event-date">November 15, 2025</p>
+              <p>
+                Learn the fundamentals of image processing and object detection
+                in this hands-on workshop.
+              </p>
+            </div>
+            <!-- This link now passes a price of 1 Rupee for testing -->
+            <a
+              href="register.html?event=Computer%20Vision%20with%20OpenCV&price=1"
+              class="register-btn"
+              >Pay ₹1 & Register</a
+            >
+          </div>
+
+          <!-- Card 3: Paid Workshop -->
+          <div class="event-card">
+            <div class="card-content">
+              <div class="event-tag paid">Paid</div>
+              <h3>Advanced Agentic Workflows</h3>
+              <p class="event-date">November 25, 2025</p>
+              <p>
+                A deep-dive masterclass on building multi-agent systems with
+                LangChain and custom logic. (Python required).
+              </p>
+            </div>
             <a
               href="register.html?event=Advanced%20Agentic%20Workflows&price=4999"
-              target="_blank"
-              rel="noopener noreferrer"
               class="register-btn"
+              >Pay ₹4999 & Register</a
             >
-              Register Now
-            </a>
-          </div>
-
-          <!-- Event Card 2 (Free) -->
-          <div class="event-card">
-            <div class="card-content">
-              <h3>Intro to Prompt Engineering</h3>
-              <p class="event-price">FREE</p>
-              <p>
-                A 90-minute free webinar covering the fundamentals of prompt
-                engineering for better results from LLMs.
-              </p>
-            </div>
-            <!-- This link points to your register.html form -->
-            <a
-              href="register.html?event=Intro%20to%20Prompt%20Engineering&price=free"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="register-btn"
-            >
-              Register for Free
-            </a>
-          </div>
-
-          <!-- Event Card 3 (Paid) -->
-          <div class="event-card">
-            <div class="card-content">
-              <h3>Computer Vision with OpenCV</h3>
-              <p class="event-price">Price: ₹1500</p>
-              <p>
-                A 2-day hands-on workshop on practical computer vision, from
-                image processing to object detection.
-              </p>
-            </div>
-            <!-- This link points to your register.html form -->
-            <a
-              href="register.html?event=Computer%20Vision%20with%20OpenCV&price=1500"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="register-btn"
-            >
-              Register Now
-            </a>
           </div>
         </div>
       </section>

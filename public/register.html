@@ -4,20 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register for Event - AgentRoomAI</title>
-    <!-- 1. Include Razorpay Checkout Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
     <link rel="stylesheet" href="register.css" />
   </head>
   <body>
     <div class="form-container">
-      <!-- This is now one single form -->
       <form id="registration-form">
         <h1 id="event-title">Event Registration</h1>
 
         <div class="form-group">
           <label for="EventName">Event Name</label>
-          <!-- This field will be auto-filled and disabled -->
           <input
             type="text"
             id="EventName"
@@ -26,7 +22,6 @@
             required
             readonly
           />
-          <!-- Hidden field to store the price -->
           <input type="hidden" id="Amount" name="Amount" />
         </div>
 
@@ -74,11 +69,6 @@
           />
         </div>
 
-        <!-- 
-              This button will now have two functions:
-              1. Submit for FREE events
-              2. Trigger payment for PAID events
-            -->
         <button type="submit" class="submit-btn" id="submit-button">
           Register Now
         </button>
@@ -88,10 +78,12 @@
     </div>
 
     <script>
+      // --- ⬇️⬇️ PASTE YOUR LIVE RAZORPAY KEY ID HERE ⬇️⬇️ ---
       const RAZORPAY_KEY_ID = "rzp_live_RXfGkXxK4K1Rra";
+      // --- ⬆️⬆️ PASTE YOUR LIVE RAZORPAY KEY ID HERE ⬆️⬆️ ---
 
-      // Your local backend server URL
-      const SERVER_URL = "http://localhost:3000";
+      // --- ⬇️⬇️ YOUR LIVE SERVER URL ⬇️⬇️ ---
+      const SERVER_URL = "https://agentroomai-server.onrender.com";
 
       // Your Google Script URL (for FREE events only)
       const GOOGLE_SCRIPT_URL =
@@ -126,129 +118,142 @@
         }
       });
 
-      // --- 3. HANDLE FORM SUBMISSION ---
+      // --- 3. HANDLE FORM SUBMISSION (UPDATED) ---
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setLoading(true); // Button says "Submitting..."
 
-        if (price > 0) {
-          // PAID Event: Start Razorpay flow
-          await handlePaidRegistration();
-        } else {
-          // FREE Event: Submit directly to Google Sheets
-          await handleFreeRegistration();
-        }
-
-        setLoading(false);
-      });
-
-      // --- 4. FUNCTION FOR FREE REGISTRATION ---
-      async function handleFreeRegistration() {
         try {
-          const formData = new FormData(form);
-          formData.append("PaymentID", "N/A (Free)"); // Add free tag
-          formData.append("Price", "free"); // Tell script it's free
-
-          const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            body: formData,
-          });
-
-          const result = await response.json();
-
-          if (result.result === "success") {
+          if (price > 0) {
+            // PAID Event: This will now wait for the whole process
+            const successMessage = await handlePaidRegistration();
+            showMessage(
+              successMessage || "Payment successful! Registration complete.",
+              "success"
+            );
+          } else {
+            // FREE Event
+            await handleFreeRegistration();
             showMessage(
               "Registration successful! You will receive a confirmation email.",
               "success"
             );
-            form.reset();
-          } else {
-            throw new Error(result.message || "Failed to save to Google Sheet");
           }
+          form.reset(); // Reset form on success
         } catch (error) {
           showMessage(`Error: ${error.message}`, "error");
+        } finally {
+          setLoading(false); // Reset button regardless of outcome
         }
+      });
+
+      // --- 4. FUNCTION FOR FREE REGISTRATION (UPDATED) ---
+      async function handleFreeRegistration() {
+        const formData = new FormData(form);
+        formData.append("PaymentID", "N/A (Free)");
+        formData.append("Price", "free");
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.result !== "success") {
+          // Throw an error to be caught by the main handler
+          throw new Error(result.message || "Failed to save to Google Sheet");
+        }
+        // No need to return anything, main handler shows success
       }
 
-      // --- 5. FUNCTION FOR PAID REGISTRATION ---
+      // --- 5. FUNCTION FOR PAID REGISTRATION (UPDATED) ---
+      // This function now returns a Promise, so the form can "await" it
       async function handlePaidRegistration() {
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        return new Promise(async (resolve, reject) => {
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
 
-        try {
-          // Step 1: Create an order on your backend
-          const orderResponse = await fetch(`${SERVER_URL}/create-order`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          });
+          try {
+            // Step 1: Create an order on your backend
+            const orderResponse = await fetch(`${SERVER_URL}/create-order`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
 
-          if (!orderResponse.ok) {
-            throw new Error("Failed to create payment order.");
-          }
-
-          const order = await orderResponse.json();
-
-          // Step 2: Open Razorpay Checkout
-          const options = {
-            key: RAZORPAY_KEY_ID,
-            amount: order.amount,
-            currency: order.currency,
-            name: "AgentRoomAI Events",
-            description: `Registration for ${data.EventName}`,
-            order_id: order.id,
-            handler: async function (response) {
-              // Step 3: Payment is successful, now verify on backend
-              setLoading(true, "Verifying payment...");
-
-              const verificationData = {
-                ...response,
-                ...data, // Send user details along with payment IDs
-              };
-
-              const verifyResponse = await fetch(
-                `${SERVER_URL}/verify-payment`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(verificationData),
-                }
+            if (!orderResponse.ok) {
+              throw new Error(
+                "Failed to create payment order. Server might be starting."
               );
+            }
 
-              const verifyResult = await verifyResponse.json();
+            const order = await orderResponse.json();
 
-              if (verifyResult.status === "success") {
-                showMessage(
-                  "Payment successful! Registration complete.",
-                  "success"
-                );
-                form.reset();
-              } else {
-                throw new Error(
-                  verifyResult.message || "Payment verification failed."
-                );
-              }
-            },
-            prefill: {
-              name: data.FullName,
-              email: data.Email,
-              contact: data.Phone,
-            },
-            notes: {
-              eventName: data.EventName,
-            },
-            theme: {
-              color: "#f97316", // Orange theme
-            },
-          };
+            // Step 2: Open Razorpay Checkout
+            const options = {
+              key: RAZORPAY_KEY_ID,
+              amount: order.amount,
+              currency: order.currency,
+              name: "AgentRoomAI Events",
+              description: `Registration for ${data.EventName}`,
+              order_id: order.id,
+              // This 'handler' runs AFTER payment is successful
+              handler: async function (response) {
+                setLoading(true, "Verifying payment...");
+                try {
+                  const verificationData = { ...response, ...data };
 
-          // Open the Razorpay popup
-          const rzp = new Razorpay(options);
-          rzp.open();
-        } catch (error) {
-          showMessage(`Error: ${error.message}`, "error");
-          setLoading(false); // Make sure to re-enable button on error
-        }
+                  const verifyResponse = await fetch(
+                    `${SERVER_URL}/verify-payment`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(verificationData),
+                    }
+                  );
+
+                  const verifyResult = await verifyResponse.json();
+
+                  if (verifyResult.status === "success") {
+                    resolve(verifyResult.message); // Resolves the promise, triggers success
+                  } else {
+                    throw new Error(
+                      verifyResult.message || "Payment verification failed."
+                    );
+                  }
+                } catch (err) {
+                  // This catch handles the verification error
+                  reject(err);
+                }
+              },
+              // This 'modal.ondismiss' runs if the user closes the popup
+              modal: {
+                ondismiss: function () {
+                  reject(new Error("Payment cancelled."));
+                },
+              },
+              prefill: {
+                name: data.FullName,
+                email: data.Email,
+                contact: data.Phone,
+              },
+              notes: {
+                eventName: data.EventName,
+              },
+              theme: {
+                color: "#f97316",
+              },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+          } catch (error) {
+            // This catch handles the /create-order error
+            reject(error);
+            CSS;
+          }
+        });
       }
 
       // --- HELPER FUNCTIONS ---
