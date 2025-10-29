@@ -3,20 +3,21 @@ import Razorpay from "razorpay";
 import cors from "cors";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
+import crypto from "crypto"; // 1. Import crypto
 
-import razorpayUtils from "razorpay/dist/utils/razorpay-utils.js";
-const { validate } = razorpayUtils;
-// --- END: MODIFIED IMPORT ---
+// --- LOAD KEYS FROM ENVIRONMENT VARIABLES ---
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
+const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
+
+if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET || !GOOGLE_SCRIPT_URL) {
+  console.error("FATAL ERROR: Missing one or more environment variables.");
+  // Optionally exit or handle this more gracefully
+}
 
 const app = express();
 app.use(cors());
-// Use bodyParser.json() as a function
 app.use(bodyParser.json());
-
-const RAZORPAY_KEY_ID = "rzp_live_RXfGkXxK4K1Rra";
-const RAZORPAY_KEY_SECRET = "RPQz9jl8Dh5GAqAhaKx8pLDK";
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
 
 const razorpay = new Razorpay({
   key_id: RAZORPAY_KEY_ID,
@@ -29,13 +30,7 @@ app.post("/create-order", async (req, res) => {
     amount: Amount * 100, // Amount in paise
     currency: "INR",
     receipt: `receipt_${new Date().getTime()}`,
-    notes: {
-      FullName,
-      Email,
-      Phone,
-      OrgName,
-      EventName,
-    },
+    notes: { FullName, Email, Phone, OrgName, EventName },
   };
 
   try {
@@ -60,15 +55,16 @@ app.post("/verify-payment", async (req, res) => {
   } = req.body;
 
   try {
-    // Re-create the signed body
+    // --- 2. START: USE CRYPTO FOR VALIDATION ---
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-    // Use the validate method
-    const paymentVerified = validate(
-      body,
-      razorpay_signature,
-      RAZORPAY_KEY_SECRET
-    );
+    const expectedSignature = crypto
+      .createHmac("sha256", RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    const paymentVerified = expectedSignature === razorpay_signature;
+    // --- END: USE CRYPTO FOR VALIDATION ---
 
     if (!paymentVerified) {
       console.error("Payment verification failed: Invalid signature");
@@ -77,29 +73,30 @@ app.post("/verify-payment", async (req, res) => {
         .json({ status: "error", message: "Payment verification failed" });
     }
   } catch (error) {
-    console.error("Error during payment verification:", error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal server error during verification",
-    });
+    console.error("Error during payment verification:", error); // Log the actual error
+    return res
+      .status(500)
+      .json({
+        status: "error",
+        message: "Internal server error during verification",
+      }); // Generic message to client
   }
 
-  // If verification is successful, save to Google Sheets
+  // If verified, save to Google Sheets
   try {
-    const formData = new URLSearchParams();
+    const formData = new URLSearchParams(); // Correctly initialize URLSearchParams
     formData.append("FullName", FullName);
     formData.append("Email", Email);
     formData.append("Phone", Phone);
     formData.append("OrgName", OrgName);
     formData.append("EventName", EventName);
     formData.append("PaymentID", razorpay_payment_id);
-    formData.append("Price", "paid"); // Hardcode as paid
+    formData.append("Price", "paid");
 
     const sheetResponse = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       body: formData,
     });
-
     const sheetResult = await sheetResponse.json();
 
     if (sheetResult.result === "success") {
@@ -113,16 +110,15 @@ app.post("/verify-payment", async (req, res) => {
     }
   } catch (error) {
     console.error("Error saving to Google Sheet:", error.message);
-    // Send success to user even if sheet fails, as payment was verified
+    // Still send success to the user since payment was good
     res.json({
       status: "success",
-      message:
-        "Payment verified! (Error saving to sheet, please check server logs)",
+      message: "Payment verified! (Error saving registration)",
     });
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
