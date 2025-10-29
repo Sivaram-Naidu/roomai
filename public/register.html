@@ -4,17 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register for Event - AgentRoomAI</title>
+    <!-- 1. Include Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <link rel="stylesheet" href="register.css" />
   </head>
   <body>
     <div class="form-container">
+      <!-- This is now one single form -->
       <form id="registration-form">
         <h1 id="event-title">Event Registration</h1>
 
-        <!-- This field is hidden, but its value is set by JavaScript -->
-        <input type="hidden" id="EventName" name="EventName" />
-        <!-- This field is also hidden and used by JS -->
-        <input type="hidden" id="PaymentID" name="PaymentID" value="N/A" />
+        <div class="form-group">
+          <label for="EventName">Event Name</label>
+          <!-- This field will be auto-filled and disabled -->
+          <input
+            type="text"
+            id="EventName"
+            name="EventName"
+            class="form-control"
+            required
+            readonly
+          />
+          <!-- Hidden field to store the price -->
+          <input type="hidden" id="Amount" name="Amount" />
+        </div>
 
         <div class="form-group">
           <label for="FullName">Full Name</label>
@@ -60,31 +74,11 @@
           />
         </div>
 
-        <!-- Payment section - hidden by default -->
-        <div id="payment-section" style="display: none">
-          <p class="payment-instructions">
-            You are registering for a paid event. Please complete your payment,
-            then paste the Transaction ID below to confirm your registration.
-          </p>
-          <a
-            href="https://razorpay.me/@dehsahkaiprivatelimited"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="payment-btn"
-          >
-            Pay Now
-          </a>
-          <div class="form-group" style="margin-top: 20px">
-            <label for="PaymentIDInput">Transaction ID</label>
-            <input
-              type="text"
-              id="PaymentIDInput"
-              class="form-control"
-              placeholder="Paste your Transaction ID here"
-            />
-          </div>
-        </div>
-
+        <!-- 
+              This button will now have two functions:
+              1. Submit for FREE events
+              2. Trigger payment for PAID events
+            -->
         <button type="submit" class="submit-btn" id="submit-button">
           Register Now
         </button>
@@ -94,91 +88,184 @@
     </div>
 
     <script>
+      const RAZORPAY_KEY_ID = "rzp_live_RXfGkXxK4K1Rra";
+
+      // Your local backend server URL
+      const SERVER_URL = "http://localhost:3000";
+
+      // Your Google Script URL (for FREE events only)
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
+
+      // --- 1. GET ALL FORM ELEMENTS ---
       const form = document.getElementById("registration-form");
       const submitButton = document.getElementById("submit-button");
       const messageDiv = document.getElementById("form-message");
-
-      // Fields
       const eventTitle = document.getElementById("event-title");
-      const hiddenEventName = document.getElementById("EventName");
-      const hiddenPaymentID = document.getElementById("PaymentID");
-      const paymentSection = document.getElementById("payment-section");
-      const paymentIDInput = document.getElementById("PaymentIDInput");
+      const eventNameInput = document.getElementById("EventName");
+      const amountInput = document.getElementById("Amount");
 
-      // This is your new Event Script URL
-      const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbw9ZbGMOJAfDQtdLeUBcbuYMlqdBLa8TT1qpRpLhuPLFkh79sz9tl1Vvb8IzJN3lzj9/exec";
+      let price = 0;
 
-      let eventPrice = "free";
-
-      // 1. Get Event Details from URL
+      // --- 2. AUTO-FILL FORM ON PAGE LOAD ---
       window.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const eventName = urlParams.get("event") || "Event Registration";
-        eventPrice = urlParams.get("price") || "free";
+        const eventName = urlParams.get("event");
+        price = parseInt(urlParams.get("price") || "0", 10);
 
-        // Set the page title and hidden form field
-        eventTitle.textContent = eventName;
-        hiddenEventName.value = eventName;
+        if (eventName) {
+          eventTitle.textContent = `Register for ${eventName}`;
+          eventNameInput.value = eventName;
+          amountInput.value = price;
+        }
 
-        // Check if this is a paid event
-        if (eventPrice !== "free") {
-          paymentSection.style.display = "block";
-          submitButton.textContent = "Confirm Registration";
-          // Make the payment ID field required
-          paymentIDInput.required = true;
+        if (price > 0) {
+          submitButton.textContent = `Pay ₹${price} & Register`;
         } else {
           submitButton.textContent = "Register for Free";
         }
       });
 
-      // 2. Handle Form Submission
-      form.addEventListener("submit", function (e) {
+      // --- 3. HANDLE FORM SUBMISSION ---
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        setLoading(true);
 
-        // If it's a paid event, copy the visible ID to the hidden field
-        if (eventPrice !== "free") {
-          hiddenPaymentID.value = paymentIDInput.value;
+        if (price > 0) {
+          // PAID Event: Start Razorpay flow
+          await handlePaidRegistration();
+        } else {
+          // FREE Event: Submit directly to Google Sheets
+          await handleFreeRegistration();
         }
 
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
-        messageDiv.textContent = "";
-        messageDiv.className = "";
-
-        fetch(SCRIPT_URL, {
-          method: "POST",
-          body: new FormData(form),
-        })
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.result === "success") {
-              messageDiv.textContent =
-                "Registration successful! Check your email for confirmation.";
-              messageDiv.className = "message-success";
-              form.reset();
-              // After reset, re-populate the hidden event name
-              const urlParams = new URLSearchParams(window.location.search);
-              hiddenEventName.value =
-                urlParams.get("event") || "Event Registration";
-            } else {
-              throw new Error(res.message || "An unknown error occurred.");
-            }
-          })
-          .catch((error) => {
-            messageDiv.textContent = `Error: ${error.message}`;
-            messageDiv.className = "message-error";
-          })
-          .finally(() => {
-            submitButton.disabled = false;
-            // Reset button text based on price
-            if (eventPrice !== "free") {
-              submitButton.textContent = "Confirm Registration";
-            } else {
-              submitButton.textContent = "Register for Free";
-            }
-          });
+        setLoading(false);
       });
+
+      // --- 4. FUNCTION FOR FREE REGISTRATION ---
+      async function handleFreeRegistration() {
+        try {
+          const formData = new FormData(form);
+          formData.append("PaymentID", "N/A (Free)"); // Add free tag
+          formData.append("Price", "free"); // Tell script it's free
+
+          const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (result.result === "success") {
+            showMessage(
+              "Registration successful! You will receive a confirmation email.",
+              "success"
+            );
+            form.reset();
+          } else {
+            throw new Error(result.message || "Failed to save to Google Sheet");
+          }
+        } catch (error) {
+          showMessage(`Error: ${error.message}`, "error");
+        }
+      }
+
+      // --- 5. FUNCTION FOR PAID REGISTRATION ---
+      async function handlePaidRegistration() {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          // Step 1: Create an order on your backend
+          const orderResponse = await fetch(`${SERVER_URL}/create-order`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          if (!orderResponse.ok) {
+            throw new Error("Failed to create payment order.");
+          }
+
+          const order = await orderResponse.json();
+
+          // Step 2: Open Razorpay Checkout
+          const options = {
+            key: RAZORPAY_KEY_ID,
+            amount: order.amount,
+            currency: order.currency,
+            name: "AgentRoomAI Events",
+            description: `Registration for ${data.EventName}`,
+            order_id: order.id,
+            handler: async function (response) {
+              // Step 3: Payment is successful, now verify on backend
+              setLoading(true, "Verifying payment...");
+
+              const verificationData = {
+                ...response,
+                ...data, // Send user details along with payment IDs
+              };
+
+              const verifyResponse = await fetch(
+                `${SERVER_URL}/verify-payment`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(verificationData),
+                }
+              );
+
+              const verifyResult = await verifyResponse.json();
+
+              if (verifyResult.status === "success") {
+                showMessage(
+                  "Payment successful! Registration complete.",
+                  "success"
+                );
+                form.reset();
+              } else {
+                throw new Error(
+                  verifyResult.message || "Payment verification failed."
+                );
+              }
+            },
+            prefill: {
+              name: data.FullName,
+              email: data.Email,
+              contact: data.Phone,
+            },
+            notes: {
+              eventName: data.EventName,
+            },
+            theme: {
+              color: "#f97316", // Orange theme
+            },
+          };
+
+          // Open the Razorpay popup
+          const rzp = new Razorpay(options);
+          rzp.open();
+        } catch (error) {
+          showMessage(`Error: ${error.message}`, "error");
+          setLoading(false); // Make sure to re-enable button on error
+        }
+      }
+
+      // --- HELPER FUNCTIONS ---
+      function setLoading(isLoading, message = "Submitting...") {
+        submitButton.disabled = isLoading;
+        submitButton.textContent = isLoading
+          ? message
+          : price > 0
+          ? `Pay ₹${price} & Register`
+          : "Register for Free";
+      }
+
+      function showMessage(message, type) {
+        messageDiv.textContent = message;
+        messageDiv.className =
+          type === "success" ? "message-success" : "message-error";
+      }
     </script>
   </body>
 </html>
